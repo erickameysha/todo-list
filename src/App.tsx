@@ -3,6 +3,7 @@ import './App.css';
 // import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {Todolist} from "./TodoList";
+import AddItemForm from "./components/AddItemForm";
 
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodolistsType = {
@@ -33,6 +34,7 @@ function App() {
             {id: v1(), title: 'GraphQL', isDone: false},
         ]
     })
+    console.log(tasks)
 
     function removeTask(id: string, todolistID: string) {
 
@@ -54,13 +56,19 @@ function App() {
         setTasks({...tasks, [todolistID]: [task, ...tasks[todolistID]]});
     }
 
+    const addTodolist = (newTitle: string) => {
+        let newID = v1()
+        let newTodolist: TodolistsType = {id: newID, title: newTitle, filter: 'all'}
+        setTodolists([...todolists, newTodolist])
+        setTasks({
+            ...tasks,
+            [newID]: []
+        })
+
+    }
+
     function changeStatus(todolistID: string, taskId: string, isDone: boolean) {
-        // let task = tasks.find(t => t.id === taskId);
-        // if (task) {
-        //     task.isDone = isDone;
-        // }
-        //
-        // setTasks([...tasks]);
+
         setTasks({...tasks, [todolistID]: tasks[todolistID].map(t => t.id === taskId ? {...t, isDone} : t)})
     }
 
@@ -71,22 +79,32 @@ function App() {
     }
 
 
+    const changeTaskSpan = (todolistID: string, taskId: string, title: string) => {
+        setTasks({...tasks, [todolistID]: tasks[todolistID].map(t => t.id === taskId ? {...t, title} : t)})
+        console.log(tasks)
+    }
+    const changeTitleSpan = ( todolistID: string, title: string)=> {
+        setTodolists(todolists.map(el=> el.id === todolistID? {...el, title}: el))
+    }
     return (
         <div className="App">
+            <AddItemForm callBack={addTodolist}/>
             {
                 todolists.map((el) => {
 
                     let tasksForTodolist = tasks[el.id];
 
                     if (el.filter === "active") {
-                        tasksForTodolist = tasks[el.id].filter(t => t.isDone === false);
+                        tasksForTodolist = tasks[el.id].filter(t => !t.isDone);
                     }
                     if (el.filter === "completed") {
-                        tasksForTodolist = tasks[el.id].filter(t => t.isDone === true);
+                        tasksForTodolist = tasks[el.id].filter(t => t.isDone);
                     }
 
                     return (
                         <Todolist
+                            changeTaskSpan={changeTaskSpan}
+                            changeTitleSpan={ changeTitleSpan}
                             key={el.id}
                             todolistID={el.id}
                             title={el.title}
