@@ -1,10 +1,12 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, memo, useCallback, useState} from 'react';
 // import * as fs from "fs";
 type propsType = {
     title: string
 callBack: (title: string)=> void
 }
-const EditableSpan = (props: propsType) => {
+const EditableSpan = memo((props: propsType) => {
+    console.log('editble span' +
+        '')
     const [title, setTitle] = useState(props.title)
     const [editSpan, setEditSpan] = useState(false)
     const onDoubleClickHandler = () => {
@@ -21,6 +23,6 @@ const EditableSpan = (props: propsType) => {
     return editSpan
         ? <input onBlur={onBlurHandler}  onChange={onChangeHandler} autoFocus value={title} type="text"/>
         : <span onDoubleClick={onDoubleClickHandler}>{title}</span>
-};
+});
 
 export default EditableSpan;

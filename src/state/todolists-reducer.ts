@@ -36,7 +36,7 @@ export const removeTodolistAC = (todolistId1: string) => {
   }as const
 }
 export const addTodolistAC = (newTodolistTitle: string, ) => {
-    debugger
+
   return { type: 'ADD-TODOLIST', payload:{ newTodolistTitle,todolistId: v1()}}as const
 }
 export const changeTodolistTitleAC = (todolistID: string, newTodolistTitle: string) => {
