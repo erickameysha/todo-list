@@ -4,8 +4,9 @@ import AddItemForm from "./components/AddItemForm";
 import EditableSpan from "./components/EditableSpan";
 import {Button, Checkbox, IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material";
+import Task from "./components/Task";
 
-type TaskType = {
+export type TaskType = {
     id: string
     title: string
     isDone: boolean
@@ -64,23 +65,15 @@ export const Todolist = React.memo((props: PropsType) => {
         <ul>
             {
                 tasksForTodolist.map(t => {
-                    const onClickHandler = () => props.removeTask(t.id, props.todolistID)
-                    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                        props.changeTaskStatus(t.id, e.currentTarget.checked, props.todolistID,);
-                    }
-                    const changeTaskSpanHandler = (title: string) => {
-                        props.changeTaskSpan(props.todolistID, t.id, title)
-                    }
 
-                    return <li key={t.id} className={t.isDone ? "is-done" : ""}>
-                        <Checkbox onChange={onChangeHandler}
-                                  checked={t.isDone}
-                                  defaultChecked size="small"/>
-                        <EditableSpan title={t.title} callBack={changeTaskSpanHandler}/>
-                        <IconButton onClick={onClickHandler} aria-label="delete">
-                            <Delete/>
-                        </IconButton>
-                    </li>
+
+                    return <Task
+                        task={t}
+                        removeTask={props.removeTask}
+                        changeTaskStatus={props.changeTaskStatus}
+                        changeTaskSpan={props.changeTaskSpan}
+                        todolistID={props.todolistID}
+                    />
                 })
             }
         </ul>
